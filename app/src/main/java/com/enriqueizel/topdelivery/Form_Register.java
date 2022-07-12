@@ -24,7 +24,7 @@ public class Form_Register extends AppCompatActivity {
     setContentView(R.layout.activity_form_register);
   }
 
-  public void getComponentsID(){
+  public void getComponentsID() {
     userPhoto = findViewById(R.id.photo_user);
     btnSelectPhoto = findViewById(R.id.btn_select_photo);
     btnRegister = findViewById(R.id.btn_register);
@@ -42,7 +42,17 @@ public class Form_Register extends AppCompatActivity {
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+      String name = editName.getText().toString();
+      String email = editEmail.getText().toString();
+      String password = editPassword.getText().toString();
 
+      if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
+        btnRegister.setEnabled(true);
+        btnRegister.setBackgroundColor(getResources().getColor(R.color.dark_red));
+      } else {
+        btnRegister.setEnabled(false);
+        btnRegister.setBackgroundColor(getResources().getColor(R.color.gray));
+      }
     }
 
     @Override
