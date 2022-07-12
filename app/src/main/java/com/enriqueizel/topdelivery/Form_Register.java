@@ -24,6 +24,10 @@ public class Form_Register extends AppCompatActivity {
     setContentView(R.layout.activity_form_register);
 
     getComponentsID();
+
+    editName.addTextChangedListener(registerTextWatcher);
+    editEmail.addTextChangedListener(registerTextWatcher);
+    editPassword.addTextChangedListener(registerTextWatcher);
   }
 
   public void getComponentsID() {
