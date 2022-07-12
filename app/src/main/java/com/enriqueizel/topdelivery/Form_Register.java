@@ -14,8 +14,12 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -78,6 +82,24 @@ public class Form_Register extends AppCompatActivity {
                   });
 
                   snackbar.show();
+                } else {
+                  String error;
+
+                  try {
+                    throw task.getException();
+                  } catch (FirebaseAuthWeakPasswordException e) {
+                    error = "A senha deve ter no mínimo 6 caracteres";
+                  } catch (FirebaseAuthInvalidCredentialsException e) {
+                    error = "Email inválido";
+                  } catch (FirebaseAuthUserCollisionException e) {
+                    error = "Este email já possui cadastrado";
+                  } catch (FirebaseNetworkException e) {
+                    error = "Sem conexão com Internet";
+                  } catch (Exception e) {
+                    error = "Erro ao cadastrar. Tente mais tarde";
+                  }
+
+                  txtErrorMessage.setText(error);
                 }
               }
             });
