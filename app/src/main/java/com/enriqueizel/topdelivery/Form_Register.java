@@ -24,6 +24,16 @@ public class Form_Register extends AppCompatActivity {
     setContentView(R.layout.activity_form_register);
   }
 
+  public void getComponentsID(){
+    userPhoto = findViewById(R.id.photo_user);
+    btnSelectPhoto = findViewById(R.id.btn_select_photo);
+    btnRegister = findViewById(R.id.btn_register);
+    editName = findViewById(R.id.edit_username);
+    editEmail = findViewById(R.id.edit_email);
+    editPassword = findViewById(R.id.edit_password);
+    txtErrorMessage = findViewById(R.id.txt_error_message);
+  }
+
   TextWatcher registerTextWatcher = new TextWatcher() {
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
