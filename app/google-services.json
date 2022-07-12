@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "709070478136",
+    "project_id": "top-delivery-94d24",
+    "storage_bucket": "top-delivery-94d24.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:709070478136:android:0dc10f53346ba0d267ffcd",
+        "android_client_info": {
+          "package_name": "com.enriqueizel.topdelivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "709070478136-2oulid7252bj88tjibd4hgj4c3q22qmf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZgU7Pqng4cYJwJeH5c5ZqWiXPVZ8LBYI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "709070478136-2oulid7252bj88tjibd4hgj4c3q22qmf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
