@@ -3,6 +3,7 @@ package com.enriqueizel.topdelivery;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -48,6 +49,12 @@ public class Form_Register extends AppCompatActivity {
       }
     });
 
+    btnSelectPhoto.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        selectPhotoFromPhone();
+      }
+    });
 
   }
 
@@ -59,6 +66,11 @@ public class Form_Register extends AppCompatActivity {
     editEmail = findViewById(R.id.edit_email);
     editPassword = findViewById(R.id.edit_password);
     txtErrorMessage = findViewById(R.id.txt_error_message);
+  }
+
+  public void selectPhotoFromPhone(){
+    Intent intent = new Intent(Intent.ACTION_PICK);
+    intent.setType("image/*");
   }
 
   public void createAccount(View view) {
