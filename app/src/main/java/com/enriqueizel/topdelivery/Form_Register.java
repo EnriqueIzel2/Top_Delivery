@@ -1,13 +1,21 @@
 package com.enriqueizel.topdelivery;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -28,6 +36,15 @@ public class Form_Register extends AppCompatActivity {
     editName.addTextChangedListener(registerTextWatcher);
     editEmail.addTextChangedListener(registerTextWatcher);
     editPassword.addTextChangedListener(registerTextWatcher);
+
+    btnRegister.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        createAccount(view);
+      }
+    });
+
+
   }
 
   public void getComponentsID() {
@@ -38,6 +55,32 @@ public class Form_Register extends AppCompatActivity {
     editEmail = findViewById(R.id.edit_email);
     editPassword = findViewById(R.id.edit_password);
     txtErrorMessage = findViewById(R.id.txt_error_message);
+  }
+
+  public void createAccount(View view) {
+    String email = editEmail.getText().toString();
+    String password = editPassword.getText().toString();
+
+    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+              @Override
+              public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                  Snackbar snackbar = Snackbar.make(
+                          view,
+                          "Cadastro realizado com sucesso",
+                          Snackbar.LENGTH_INDEFINITE
+                  ).setAction("OK", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                      finish();
+                    }
+                  });
+
+                  snackbar.show();
+                }
+              }
+            });
   }
 
   TextWatcher registerTextWatcher = new TextWatcher() {
