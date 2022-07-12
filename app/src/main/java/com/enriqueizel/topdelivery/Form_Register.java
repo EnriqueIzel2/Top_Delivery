@@ -1,9 +1,15 @@
 package com.enriqueizel.topdelivery;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,6 +36,8 @@ public class Form_Register extends AppCompatActivity {
   private Button btnSelectPhoto, btnRegister;
   private EditText editName, editEmail, editPassword;
   private TextView txtErrorMessage;
+
+  private Uri selectUri;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +66,31 @@ public class Form_Register extends AppCompatActivity {
 
   }
 
+  public void selectPhotoFromPhone(){
+    Intent intent = new Intent(Intent.ACTION_PICK);
+    intent.setType("image/*");
+    activityResultLauncher.launch(intent);
+  }
+
+  ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+          new ActivityResultContracts.StartActivityForResult(),
+          new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+              if (result.getResultCode() == Activity.RESULT_OK){
+                Intent data = result.getData();
+                selectUri = data.getData();
+
+                try {
+                  userPhoto.setImageURI(selectUri);
+                }catch (Exception e){
+                  e.printStackTrace();
+                }
+              }
+            }
+          }
+  );
+
   public void getComponentsID() {
     userPhoto = findViewById(R.id.photo_user);
     btnSelectPhoto = findViewById(R.id.btn_select_photo);
@@ -66,11 +99,6 @@ public class Form_Register extends AppCompatActivity {
     editEmail = findViewById(R.id.edit_email);
     editPassword = findViewById(R.id.edit_password);
     txtErrorMessage = findViewById(R.id.txt_error_message);
-  }
-
-  public void selectPhotoFromPhone(){
-    Intent intent = new Intent(Intent.ACTION_PICK);
-    intent.setType("image/*");
   }
 
   public void createAccount(View view) {
