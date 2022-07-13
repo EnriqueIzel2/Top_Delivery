@@ -19,6 +19,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseNetworkException;
@@ -27,6 +29,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -66,7 +73,7 @@ public class Form_Register extends AppCompatActivity {
 
   }
 
-  public void selectPhotoFromPhone(){
+  public void selectPhotoFromPhone() {
     Intent intent = new Intent(Intent.ACTION_PICK);
     intent.setType("image/*");
     activityResultLauncher.launch(intent);
@@ -77,13 +84,13 @@ public class Form_Register extends AppCompatActivity {
           new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
-              if (result.getResultCode() == Activity.RESULT_OK){
+              if (result.getResultCode() == Activity.RESULT_OK) {
                 Intent data = result.getData();
                 selectUri = data.getData();
 
                 try {
                   userPhoto.setImageURI(selectUri);
-                }catch (Exception e){
+                } catch (Exception e) {
                   e.printStackTrace();
                 }
               }
@@ -110,6 +117,7 @@ public class Form_Register extends AppCompatActivity {
               @Override
               public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+                  saveDataUser();
                   Snackbar snackbar = Snackbar.make(
                           view,
                           "Cadastro realizado com sucesso",
@@ -143,6 +151,35 @@ public class Form_Register extends AppCompatActivity {
                 }
               }
             });
+  }
+
+  public void saveDataUser() {
+    String fileName = UUID.randomUUID().toString();
+
+    final StorageReference reference = FirebaseStorage.getInstance().getReference(
+            "/images/" + fileName
+    );
+    reference.putFile(selectUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+      @Override
+      public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+          @Override
+          public void onSuccess(Uri uri) {
+            // TODO: 12/07/2022 manda pro firebase
+          }
+        }).addOnFailureListener(new OnFailureListener() {
+          @Override
+          public void onFailure(@NonNull Exception e) {
+            // TODO: 12/07/2022 trata erro de download
+          }
+        });
+      }
+    }).addOnFailureListener(new OnFailureListener() {
+      @Override
+      public void onFailure(@NonNull Exception e) {
+        // TODO: 12/07/2022 trata erro em salvar no firebase
+      }
+    });
   }
 
   TextWatcher registerTextWatcher = new TextWatcher() {
