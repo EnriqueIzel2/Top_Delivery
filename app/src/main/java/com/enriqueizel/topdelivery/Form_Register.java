@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,10 +30,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -44,6 +49,7 @@ public class Form_Register extends AppCompatActivity {
   private EditText editName, editEmail, editPassword;
   private TextView txtErrorMessage;
 
+  private String userID;
   private Uri selectUri;
 
   @Override
@@ -165,7 +171,29 @@ public class Form_Register extends AppCompatActivity {
         reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
           @Override
           public void onSuccess(Uri uri) {
-            // TODO: 12/07/2022 manda pro firebase
+            String photho = uri.toString();
+
+            String name = editName.getText().toString();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            Map<String, Object> users = new HashMap<>();
+            users.put("name", name);
+            users.put("photo", photho);
+
+            userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+            DocumentReference documentReference = db.collection("Users").document(userID);
+            documentReference.set(users).addOnSuccessListener(new OnSuccessListener<Void>() {
+              @Override
+              public void onSuccess(Void unused) {
+                Log.i("db", "Sucesso ao salvar dados");
+              }
+            }).addOnFailureListener(new OnFailureListener() {
+              @Override
+              public void onFailure(@NonNull Exception e) {
+                Log.i("db", "erro ao salvar os dados" + e.toString());
+              }
+            });
           }
         }).addOnFailureListener(new OnFailureListener() {
           @Override
