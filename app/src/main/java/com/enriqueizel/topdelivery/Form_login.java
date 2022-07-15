@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,6 +23,7 @@ public class Form_login extends AppCompatActivity {
   private EditText editPassword, editEmail;
   private Button btnLogin;
   private TextView txtCreateAccount, txtErrorMessage;
+  private ProgressBar progressBar;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +65,24 @@ public class Form_login extends AppCompatActivity {
               @Override
               public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                  // TODO: 15/07/2022 leva para tela de produtos
+                  progressBar.setVisibility(View.VISIBLE);
+
+                  new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                      goToProducts();
+                    }
+                  }, 3000);
                 }
               }
             }
     );
+  }
+
+  public void goToProducts(){
+    Intent intent = new Intent(Form_login.this, Products_List.class);
+    startActivity(intent);
+    finish();
   }
 
   public void getComponentsID() {
@@ -74,5 +91,6 @@ public class Form_login extends AppCompatActivity {
     editEmail = findViewById(R.id.edit_email);
     editPassword = findViewById(R.id.edit_password);
     txtErrorMessage = findViewById(R.id.txt_error_message);
+    progressBar = findViewById(R.id.progress_bar_login);
   }
 }
