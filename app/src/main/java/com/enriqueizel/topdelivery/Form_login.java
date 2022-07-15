@@ -51,12 +51,13 @@ public class Form_login extends AppCompatActivity {
           txtErrorMessage.setText("Preencha todos os campos");
         } else {
           txtErrorMessage.setText("");
+          userLogin();
         }
       }
     });
   }
 
-  public void userLogin(){
+  public void userLogin() {
     String email = editEmail.getText().toString();
     String password = editPassword.getText().toString();
 
@@ -64,7 +65,7 @@ public class Form_login extends AppCompatActivity {
             new OnCompleteListener<AuthResult>() {
               @Override
               public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                   progressBar.setVisibility(View.VISIBLE);
 
                   new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -73,13 +74,21 @@ public class Form_login extends AppCompatActivity {
                       goToProducts();
                     }
                   }, 3000);
+                } else {
+                  String error;
+                  try {
+                    throw task.getException();
+                  } catch (Exception e) {
+                    error = "Erro ao logar usuário";
+                  }
+                  txtErrorMessage.setText(error);
                 }
               }
             }
     );
   }
 
-  public void goToProducts(){
+  public void goToProducts() {
     Intent intent = new Intent(Form_login.this, Products_List.class);
     startActivity(intent);
     finish();
