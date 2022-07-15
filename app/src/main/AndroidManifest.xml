@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.enriqueizel.topdelivery">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TopDelivery"
         tools:targetApi="31">
+        <activity
+            android:name=".Products_List"
+            android:exported="false" />
         <activity
             android:name=".Form_Register"
             android:exported="false" />
