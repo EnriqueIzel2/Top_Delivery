@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:icon="@drawable/ic_menu_24"
+        android:title=""
+        app:showAsAction="always">
+
+        <menu>
+            <item
+                android:id="@+id/userProfile"
+                android:icon="@drawable/ic_person_pin_24"
+                android:title="Perfil"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/orders"
+                android:icon="@drawable/ic_shopping_cart_24"
+                android:title="Pedidos"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/logout"
+                android:icon="@drawable/ic_exit_to_app_24"
+                android:title="Sair"
+                app:showAsAction="never" />
+        </menu>
+
+    </item>
+</menu>
