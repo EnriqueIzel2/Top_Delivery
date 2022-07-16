@@ -8,19 +8,19 @@
 
         <menu>
             <item
-                android:id="@+id/userProfile"
+                android:id="@+id/ic_user_profile"
                 android:icon="@drawable/ic_person_pin_24"
                 android:title="Perfil"
                 app:showAsAction="never" />
 
             <item
-                android:id="@+id/orders"
+                android:id="@+id/ic_orders"
                 android:icon="@drawable/ic_shopping_cart_24"
                 android:title="Pedidos"
                 app:showAsAction="never" />
 
             <item
-                android:id="@+id/logout"
+                android:id="@+id/ic_logout"
                 android:icon="@drawable/ic_exit_to_app_24"
                 android:title="Sair"
                 app:showAsAction="never" />
