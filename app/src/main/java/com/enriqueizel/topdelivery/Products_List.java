@@ -31,7 +31,8 @@ public class Products_List extends AppCompatActivity {
     int itemID = item.getItemId();
 
     if (itemID == R.id.ic_user_profile) {
-
+      Intent intent = new Intent(Products_List.this, User_Profile.class);
+      startActivity(intent);
     } else if (itemID == R.id.ic_orders) {
 
     } else if (itemID == R.id.ic_logout) {
