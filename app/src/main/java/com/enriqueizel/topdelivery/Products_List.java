@@ -2,6 +2,7 @@ package com.enriqueizel.topdelivery;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -10,11 +11,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.enriqueizel.topdelivery.Adapter.AdapterProduct;
+import com.enriqueizel.topdelivery.Model.Product;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Products_List extends AppCompatActivity {
 
   private RecyclerView recyclerViewProducts;
+  private AdapterProduct adapterProduct;
+  private List<Product> productList;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +30,19 @@ public class Products_List extends AppCompatActivity {
     setContentView(R.layout.activity_products_list);
 
     recyclerViewProducts = findViewById(R.id.recycler_products);
+    productList = new ArrayList<>();
+    adapterProduct = new AdapterProduct(getApplicationContext(), productList);
+    recyclerViewProducts.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+    recyclerViewProducts.setHasFixedSize(true);
+    recyclerViewProducts.setAdapter(adapterProduct);
+
+    Product product = new Product(R.drawable.ic_launcher_background, "Produto 1", "30,99");
+    productList.add(product);
+    Product product2 = new Product(R.drawable.ic_launcher_background, "Produto 2", "30,99");
+    productList.add(product2);
+    Product product3 = new Product(R.drawable.ic_launcher_background, "Produto 3", "30,99");
+    productList.add(product3);
+
   }
 
   @Override
