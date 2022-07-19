@@ -2,22 +2,16 @@ package com.enriqueizel.topdelivery.Model;
 
 public class Product {
 
-  private int photo;
+  private String photo;
   private String name;
   private String price;
   private String description;
 
-  public Product(int photo, String name, String price) {
-    this.photo = photo;
-    this.name = name;
-    this.price = price;
-  }
-
-  public int getPhoto() {
+  public String getPhoto() {
     return photo;
   }
 
-  public void setPhoto(int photo) {
+  public void setPhoto(String photo) {
     this.photo = photo;
   }
 
