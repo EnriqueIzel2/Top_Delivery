@@ -3,7 +3,9 @@ package com.enriqueizel.topdelivery;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -31,6 +33,14 @@ public class User_Profile extends AppCompatActivity {
     setContentView(R.layout.activity_user_profile);
 
     getComponentsID();
+
+    editProfile.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        Intent intent = new Intent(User_Profile.this, Edit_Profile.class);
+        startActivity(intent);
+      }
+    });
   }
 
   @Override
