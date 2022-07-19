@@ -4,11 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.enriqueizel.topdelivery.R;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ProductViewHolder> {
 
@@ -33,10 +36,19 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ProductV
     return 0;
   }
 
-  public class ProductViewHolder extends RecyclerView.ViewHolder{
+  public class ProductViewHolder extends RecyclerView.ViewHolder {
+
+    private CircleImageView photo;
+    private TextView name;
+    private TextView price;
+    private TextView description;
 
     public ProductViewHolder(@NonNull View itemView) {
       super(itemView);
+
+      photo = itemView.findViewById(R.id.img_product_photo);
+      name = itemView.findViewById(R.id.txt_product_name);
+      price = itemView.findViewById(R.id.txt_product_price);
     }
   }
 }
