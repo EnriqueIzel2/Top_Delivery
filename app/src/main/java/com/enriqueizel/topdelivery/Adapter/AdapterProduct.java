@@ -9,13 +9,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.enriqueizel.topdelivery.Model.Product;
 import com.enriqueizel.topdelivery.R;
+
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ProductViewHolder> {
 
   private Context context;
+  private List<Product> productList;
+
+  public AdapterProduct(Context context, List<Product> productList) {
+    this.context = context;
+    this.productList = productList;
+  }
 
   @NonNull
   @Override
@@ -28,12 +37,14 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ProductV
 
   @Override
   public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-
+    holder.photo.setImageResource(productList.get(position).getPhoto());
+    holder.name.setText(productList.get(position).getName());
+    holder.price.setText(productList.get(position).getPrice());
   }
 
   @Override
   public int getItemCount() {
-    return 0;
+    return productList.size();
   }
 
   public class ProductViewHolder extends RecyclerView.ViewHolder {
