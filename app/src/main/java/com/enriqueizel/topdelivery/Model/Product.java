@@ -7,6 +7,12 @@ public class Product {
   private String price;
   private String description;
 
+  public Product(int photo, String name, String price) {
+    this.photo = photo;
+    this.name = name;
+    this.price = price;
+  }
+
   public int getPhoto() {
     return photo;
   }
