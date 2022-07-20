@@ -34,26 +34,20 @@ public class Form_login extends AppCompatActivity {
     getSupportActionBar().hide();
     getComponentsID();
 
-    txtCreateAccount.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        Intent intent = new Intent(Form_login.this, Form_Register.class);
-        startActivity(intent);
-      }
+    txtCreateAccount.setOnClickListener(view -> {
+      Intent intent = new Intent(Form_login.this, Form_Register.class);
+      startActivity(intent);
     });
 
-    btnLogin.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        String email = editEmail.getText().toString();
-        String password = editPassword.getText().toString();
+    btnLogin.setOnClickListener(view -> {
+      String email = editEmail.getText().toString();
+      String password = editPassword.getText().toString();
 
-        if (email.isEmpty() || password.isEmpty()) {
-          txtErrorMessage.setText("Preencha todos os campos");
-        } else {
-          txtErrorMessage.setText("");
-          userLogin();
-        }
+      if (email.isEmpty() || password.isEmpty()) {
+        txtErrorMessage.setText("Preencha todos os campos");
+      } else {
+        txtErrorMessage.setText("");
+        userLogin();
       }
     });
   }
@@ -64,7 +58,7 @@ public class Form_login extends AppCompatActivity {
 
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-    if (currentUser != null){
+    if (currentUser != null) {
       goToProducts();
     }
   }
@@ -74,27 +68,19 @@ public class Form_login extends AppCompatActivity {
     String password = editPassword.getText().toString();
 
     FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(
-            new OnCompleteListener<AuthResult>() {
-              @Override
-              public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                  progressBar.setVisibility(View.VISIBLE);
+            task -> {
+              if (task.isSuccessful()) {
+                progressBar.setVisibility(View.VISIBLE);
 
-                  new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                      goToProducts();
-                    }
-                  }, 3000);
-                } else {
-                  String error;
-                  try {
-                    throw task.getException();
-                  } catch (Exception e) {
-                    error = "Erro ao logar usuário";
-                  }
-                  txtErrorMessage.setText(error);
+                new Handler(Looper.getMainLooper()).postDelayed(() -> goToProducts(), 3000);
+              } else {
+                String error;
+                try {
+                  throw task.getException();
+                } catch (Exception e) {
+                  error = "Erro ao logar usuário";
                 }
+                txtErrorMessage.setText(error);
               }
             }
     );

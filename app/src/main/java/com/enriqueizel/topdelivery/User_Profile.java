@@ -34,12 +34,9 @@ public class User_Profile extends AppCompatActivity {
 
     getComponentsID();
 
-    editProfile.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        Intent intent = new Intent(User_Profile.this, Edit_Profile.class);
-        startActivity(intent);
-      }
+    editProfile.setOnClickListener(view -> {
+      Intent intent = new Intent(User_Profile.this, Edit_Profile.class);
+      startActivity(intent);
     });
   }
 
@@ -52,18 +49,12 @@ public class User_Profile extends AppCompatActivity {
     String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
     DocumentReference documentReference = db.collection("Users").document(userID);
-    documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-      @Override
-      public void onEvent(
-              @Nullable DocumentSnapshot documentSnapshot,
-              @Nullable FirebaseFirestoreException error
-      ) {
-        if (documentSnapshot != null) {
-          Glide.with(getApplicationContext()).load(documentSnapshot.getString("photo"))
-                  .into(userPhoto);
-          userName.setText(documentSnapshot.getString("name"));
-          userEmail.setText(email);
-        }
+    documentReference.addSnapshotListener((documentSnapshot, error) -> {
+      if (documentSnapshot != null) {
+        Glide.with(getApplicationContext()).load(documentSnapshot.getString("photo"))
+                .into(userPhoto);
+        userName.setText(documentSnapshot.getString("name"));
+        userEmail.setText(email);
       }
     });
   }

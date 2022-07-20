@@ -76,15 +76,12 @@ public class Products_List extends AppCompatActivity {
 
     db = FirebaseFirestore.getInstance();
     db.collection("Products").orderBy("name").get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-              @Override
-              public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                  for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-                    Product products = queryDocumentSnapshot.toObject(Product.class);
-                    productList.add(products);
-                    adapterProduct.notifyDataSetChanged();
-                  }
+            .addOnCompleteListener(task -> {
+              if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+                  Product products = queryDocumentSnapshot.toObject(Product.class);
+                  productList.add(products);
+                  adapterProduct.notifyDataSetChanged();
                 }
               }
             });

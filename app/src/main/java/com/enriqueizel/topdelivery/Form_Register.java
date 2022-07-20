@@ -63,20 +63,9 @@ public class Form_Register extends AppCompatActivity {
     editEmail.addTextChangedListener(registerTextWatcher);
     editPassword.addTextChangedListener(registerTextWatcher);
 
-    btnRegister.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        createAccount(view);
-      }
-    });
+    btnRegister.setOnClickListener(this::createAccount);
 
-    btnSelectPhoto.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        selectPhotoFromPhone();
-      }
-    });
-
+    btnSelectPhoto.setOnClickListener(view -> selectPhotoFromPhone());
   }
 
   public void selectPhotoFromPhone() {
@@ -119,42 +108,34 @@ public class Form_Register extends AppCompatActivity {
     String password = editPassword.getText().toString();
 
     FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-              @Override
-              public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                  saveDataUser();
-                  Snackbar snackbar = Snackbar.make(
-                          view,
-                          "Cadastro realizado com sucesso",
-                          Snackbar.LENGTH_INDEFINITE
-                  ).setAction("OK", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                      finish();
-                    }
-                  });
+            .addOnCompleteListener(task -> {
+              if (task.isSuccessful()) {
+                saveDataUser();
+                Snackbar snackbar = Snackbar.make(
+                        view,
+                        "Cadastro realizado com sucesso",
+                        Snackbar.LENGTH_INDEFINITE
+                ).setAction("OK", view1 -> finish());
 
-                  snackbar.show();
-                } else {
-                  String error;
+                snackbar.show();
+              } else {
+                String error;
 
-                  try {
-                    throw task.getException();
-                  } catch (FirebaseAuthWeakPasswordException e) {
-                    error = "A senha deve ter no mínimo 6 caracteres";
-                  } catch (FirebaseAuthInvalidCredentialsException e) {
-                    error = "Email inválido";
-                  } catch (FirebaseAuthUserCollisionException e) {
-                    error = "Este email já possui cadastrado";
-                  } catch (FirebaseNetworkException e) {
-                    error = "Sem conexão com Internet";
-                  } catch (Exception e) {
-                    error = "Erro ao cadastrar. Tente mais tarde";
-                  }
-
-                  txtErrorMessage.setText(error);
+                try {
+                  throw task.getException();
+                } catch (FirebaseAuthWeakPasswordException e) {
+                  error = "A senha deve ter no mínimo 6 caracteres";
+                } catch (FirebaseAuthInvalidCredentialsException e) {
+                  error = "Email inválido";
+                } catch (FirebaseAuthUserCollisionException e) {
+                  error = "Este email já possui cadastrado";
+                } catch (FirebaseNetworkException e) {
+                  error = "Sem conexão com Internet";
+                } catch (Exception e) {
+                  error = "Erro ao cadastrar. Tente mais tarde";
                 }
+
+                txtErrorMessage.setText(error);
               }
             });
   }
@@ -165,48 +146,27 @@ public class Form_Register extends AppCompatActivity {
     final StorageReference reference = FirebaseStorage.getInstance().getReference(
             "/images/" + fileName
     );
-    reference.putFile(selectUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-      @Override
-      public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-          @Override
-          public void onSuccess(Uri uri) {
-            String photho = uri.toString();
+    reference.putFile(selectUri).addOnSuccessListener(
+            taskSnapshot -> reference.getDownloadUrl().addOnSuccessListener(uri -> {
+              String photho = uri.toString();
 
-            String name = editName.getText().toString();
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
+              String name = editName.getText().toString();
+              FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-            Map<String, Object> users = new HashMap<>();
-            users.put("name", name);
-            users.put("photo", photho);
+              Map<String, Object> users = new HashMap<>();
+              users.put("name", name);
+              users.put("photo", photho);
 
-            userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+              userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-            DocumentReference documentReference = db.collection("Users").document(userID);
-            documentReference.set(users).addOnSuccessListener(new OnSuccessListener<Void>() {
-              @Override
-              public void onSuccess(Void unused) {
-                Log.i("db", "Sucesso ao salvar dados");
-              }
-            }).addOnFailureListener(new OnFailureListener() {
-              @Override
-              public void onFailure(@NonNull Exception e) {
-                Log.i("db", "erro ao salvar os dados" + e.toString());
-              }
-            });
-          }
-        }).addOnFailureListener(new OnFailureListener() {
-          @Override
-          public void onFailure(@NonNull Exception e) {
-            // TODO: 12/07/2022 trata erro de download
-          }
-        });
-      }
-    }).addOnFailureListener(new OnFailureListener() {
-      @Override
-      public void onFailure(@NonNull Exception e) {
-        // TODO: 12/07/2022 trata erro em salvar no firebase
-      }
+              DocumentReference documentReference = db.collection("Users").document(userID);
+              documentReference.set(users).addOnSuccessListener(
+                              unused -> Log.i("db", "Sucesso ao salvar dados"))
+                      .addOnFailureListener(e -> Log.i("db", "erro ao salvar os dados" + e.toString()));
+            }).addOnFailureListener(e -> {
+              // TODO: 12/07/2022 trata erro de download
+            })).addOnFailureListener(e -> {
+      // TODO: 12/07/2022 trata erro em salvar no firebase
     });
   }
 

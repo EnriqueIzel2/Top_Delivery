@@ -51,23 +51,15 @@ public class Edit_Profile extends AppCompatActivity {
 
     getComponentsID();
 
-    btnEditSelectPhoto.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        selectPhotoFromPhone();
-      }
-    });
+    btnEditSelectPhoto.setOnClickListener(view -> selectPhotoFromPhone());
 
-    btnUpdateData.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        String name = editUsername.getText().toString();
-        if (name.isEmpty()) {
-          Snackbar snackbar = Snackbar.make(view, "Preencha todos os campos", Snackbar.LENGTH_SHORT);
-          snackbar.show();
-        } else {
-          updateData(view);
-        }
+    btnUpdateData.setOnClickListener(view -> {
+      String name = editUsername.getText().toString();
+      if (name.isEmpty()) {
+        Snackbar snackbar = Snackbar.make(view, "Preencha todos os campos", Snackbar.LENGTH_SHORT);
+        snackbar.show();
+      } else {
+        updateData(view);
       }
     });
   }
@@ -103,60 +95,36 @@ public class Edit_Profile extends AppCompatActivity {
     final StorageReference reference = FirebaseStorage.getInstance().getReference(
             "/images/" + fileName
     );
-    reference.putFile(selectUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-      @Override
-      public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-          @Override
-          public void onSuccess(Uri uri) {
-            String photho = uri.toString();
+    reference.putFile(selectUri).addOnSuccessListener(taskSnapshot -> reference.getDownloadUrl()
+            .addOnSuccessListener(uri -> {
+              String photho = uri.toString();
 
-            String name = editUsername.getText().toString();
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
+              String name = editUsername.getText().toString();
+              FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-            Map<String, Object> users = new HashMap<>();
-            users.put("name", name);
-            users.put("photo", photho);
+              Map<String, Object> users = new HashMap<>();
+              users.put("name", name);
+              users.put("photo", photho);
 
-            userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+              userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-            db.collection("Users").document(userID)
-                    .update("name", name, "photo", photho)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                      @Override
-                      public void onComplete(@NonNull Task<Void> task) {
+              db.collection("Users").document(userID)
+                      .update("name", name, "photo", photho)
+                      .addOnCompleteListener(task -> {
                         Snackbar snackbar = Snackbar.make(
                                 view,
                                 "Sucesso ao atualizar dados",
                                 Snackbar.LENGTH_INDEFINITE
-                        ).setAction("OK", new View.OnClickListener() {
-                          @Override
-                          public void onClick(View view) {
-                            finish();
-                          }
-                        });
+                        ).setAction("OK", view1 -> finish());
                         snackbar.show();
-                      }
-                    }).addOnFailureListener(new OnFailureListener() {
-                      @Override
-                      public void onFailure(@NonNull Exception e) {
+                      }).addOnFailureListener(e -> {
                         // TODO: 18/07/2022 resolver a falha
-                      }
-                    });
+                      });
 
-          }
-        }).addOnFailureListener(new OnFailureListener() {
-          @Override
-          public void onFailure(@NonNull Exception e) {
-            // TODO: 12/07/2022 trata erro de download
-          }
-        });
-      }
-    }).addOnFailureListener(new OnFailureListener() {
-      @Override
-      public void onFailure(@NonNull Exception e) {
-        // TODO: 12/07/2022 trata erro em salvar no firebase
-      }
+            }).addOnFailureListener(e -> {
+              // TODO: 12/07/2022 trata erro de download
+            })).addOnFailureListener(e -> {
+      // TODO: 12/07/2022 trata erro em salvar no firebase
     });
   }
 
