@@ -13,7 +13,12 @@ import android.widget.Toast;
 
 import com.enriqueizel.topdelivery.Adapter.AdapterProduct;
 import com.enriqueizel.topdelivery.Model.Product;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +28,7 @@ public class Products_List extends AppCompatActivity {
   private RecyclerView recyclerViewProducts;
   private AdapterProduct adapterProduct;
   private List<Product> productList;
+  private FirebaseFirestore db;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +42,20 @@ public class Products_List extends AppCompatActivity {
     recyclerViewProducts.setHasFixedSize(true);
     recyclerViewProducts.setAdapter(adapterProduct);
 
-    Product product = new Product(R.drawable.ic_launcher_background, "Produto 1", "30,99");
-    productList.add(product);
-    Product product2 = new Product(R.drawable.ic_launcher_background, "Produto 2", "30,99");
-    productList.add(product2);
-    Product product3 = new Product(R.drawable.ic_launcher_background, "Produto 3", "30,99");
-    productList.add(product3);
-
+    db = FirebaseFirestore.getInstance();
+    db.collection("Products").orderBy("name").get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+              @Override
+              public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                  for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+                    Product products = queryDocumentSnapshot.toObject(Product.class);
+                    productList.add(products);
+                    adapterProduct.notifyDataSetChanged();
+                  }
+                }
+              }
+            });
   }
 
   @Override
