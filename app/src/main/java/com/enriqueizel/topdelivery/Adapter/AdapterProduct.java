@@ -41,7 +41,6 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ProductV
     Glide.with(context).load(productList.get(position).getPhoto()).into(holder.photo);
     holder.name.setText(productList.get(position).getName());
     holder.price.setText(productList.get(position).getPrice());
-    holder.description.setText(productList.get(position).getDescription());
   }
 
   @Override
@@ -54,7 +53,6 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ProductV
     private CircleImageView photo;
     private TextView name;
     private TextView price;
-    private TextView description;
 
     public ProductViewHolder(@NonNull View itemView) {
       super(itemView);
@@ -62,7 +60,6 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ProductV
       photo = itemView.findViewById(R.id.img_product_photo);
       name = itemView.findViewById(R.id.txt_product_name);
       price = itemView.findViewById(R.id.txt_product_price);
-      description = itemView.findViewById(R.id.details_txt_description);
     }
   }
 }
