@@ -9,10 +9,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.enriqueizel.topdelivery.Adapter.AdapterProduct;
 import com.enriqueizel.topdelivery.Model.Product;
+import com.enriqueizel.topdelivery.RecyclerViewItemClickListener.RecyclerViewItemClickListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,6 +44,30 @@ public class Products_List extends AppCompatActivity {
     recyclerViewProducts.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
     recyclerViewProducts.setHasFixedSize(true);
     recyclerViewProducts.setAdapter(adapterProduct);
+
+    // evento de click no recycler view
+    recyclerViewProducts.addOnItemTouchListener(
+            new RecyclerViewItemClickListener(
+                    getApplicationContext(),
+                    recyclerViewProducts,
+                    new RecyclerViewItemClickListener.OnItemClickListener() {
+                      @Override
+                      public void onItemClick(View view, int position) {
+                        Product product = productList.get(position);
+                      }
+
+                      @Override
+                      public void onLongItemClick(View view, int position) {
+
+                      }
+
+                      @Override
+                      public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                      }
+                    }
+            )
+    );
 
     db = FirebaseFirestore.getInstance();
     db.collection("Products").orderBy("name").get()
