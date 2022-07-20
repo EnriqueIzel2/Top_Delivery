@@ -53,7 +53,8 @@ public class Products_List extends AppCompatActivity {
                     new RecyclerViewItemClickListener.OnItemClickListener() {
                       @Override
                       public void onItemClick(View view, int position) {
-                        Product product = productList.get(position);
+                        Intent intent = new Intent(Products_List.this, Product_Details.class);
+                        startActivity(intent);
                       }
 
                       @Override
